@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-with open("congressmember.html") as file:
+with open("congressman.html") as file:
 	soup = BeautifulSoup(file, 'html.parser')
 
 images = soup.find_all("img")
