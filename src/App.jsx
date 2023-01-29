@@ -1,11 +1,19 @@
 import { useState } from 'react'
 import './App.css'
+import HomeView from './Views/HomeView.jsx'
+import {Route, Routes} from "react-router-dom"
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <p>Hey!</p>
+    <div className='App'>
+      <Routes>
+        <Route path='/' element={<HomeView />} />
+        {/* <Route path='girls' element={<Girls />} />
+        <Route path='guys' element={<Guys />} /> */}
+      </Routes>
+    </div>
   )
 }
 
