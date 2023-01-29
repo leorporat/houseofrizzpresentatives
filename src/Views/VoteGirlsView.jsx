@@ -34,12 +34,15 @@ function VoteGirlsView() {
     }
 
     return (
-        
-        <div>
-            <img src={imageleft} onClick={leftClick} />
-            <p> {captionleft}</p>
-            <img src={imageright} onClick={rightClick} /> 
-            <p> {captionright}</p>
+        <div className='voting-container'>
+            <div className='left-container'>
+                <img className='left-image image' src={imageleft} onClick={leftClick} />
+                <p className='left-caption caption'> {captionleft}</p>
+            </div>
+            <div className='right-container'>
+                <img className='right-image image' src={imageright} onClick={rightClick} /> 
+                <p className='right-caption caption'>{captionright}</p>
+            </div>
         </div>
     )
 }
