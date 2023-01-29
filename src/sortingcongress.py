@@ -12,10 +12,10 @@ femaleURLs = open('./Views/congressfemaleimages.txt', 'w')
 for i in range(len(namelines)):
 	if namelines[i][-2] == 'M':
 		maleNames.write(namelines[i][0:-2] + '\n')
-		maleURLs.write(imagelines[i] + '\n')
+		maleURLs.write(imagelines[i])
 	elif namelines[i][-2] == 'F':
 		femaleNames.write(namelines[i][0:-2] + '\n')
-		femaleURLs.write(imagelines[i] + '\n')
+		femaleURLs.write(imagelines[i])
 
 fileNames.close()
 fileURLs.close()
