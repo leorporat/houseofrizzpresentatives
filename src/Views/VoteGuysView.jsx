@@ -1,6 +1,6 @@
-// function VoteGuysView() {
+//function VoteGuysView() {
 //     return (
-
+         
 //     )
 // }
 
