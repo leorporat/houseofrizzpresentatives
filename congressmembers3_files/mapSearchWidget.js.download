@@ -1,0 +1,151 @@
+(function ($) {
+    'use strict';
+    if (!$.congress) {
+        $.congress = {};
+    }
+
+    $.congress.mapSearchWidget = function (el, options) {
+        var base = this;
+
+        base.init = function () {
+            base.mymap = null;
+            base.myview = null;
+            base.msearch = null;
+
+            require([
+                "esri/Map",
+                "esri/views/MapView",
+                "esri/widgets/Search",
+                "esri/tasks/Locator"
+            ],function(Map, MapView, Search, Locator){
+                base.mymap = new Map({
+                    basemap: "streets-navigation-vector"
+//                    portalItem: {
+//                        id: "ddf03748944d499c85661dd5cdd36d95",
+//                    }
+                });
+                base.mapOptions = {
+                    container: "district-map-view",
+                    map: base.mymap,
+                    //center: [-97.5407, 38.4360] // center point of USA map
+                };
+                base.myview = new MapView(base.mapOptions);
+                base.locatorTask = new Locator({
+                    url: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+                });
+                base.msearch = new Search({
+                    view: base.myview,
+                    container: "search-widget",
+                    sources: [
+                        {
+                            name: 'Address Lookup', // don't change this name
+                            placeholder: "Find address or place",
+                            locator: base.locatorTask,
+                            singleLineFieldName: "SingleLine",
+                            countryCode: 'US',
+                            outFields: ["*"],
+                            displayField: "",
+                            maxResults: 6,
+                            maxSuggestions: 6
+                        }
+                    ],
+                    includeDefaultSources: false,  // aka exclude the "Geocode World ..." layer in the ddl search box
+                });
+
+                base.msearch.on("search-complete", function (evt) {
+                    $('#warningMsg').hide();
+                    if (!evt.errors.length && !evt.numResults) {
+                        $('#warningMsgMessage')[0].innerText = 'There were no results found for \"' + evt.searchTerm + '\"';
+                        $('#warningMsg').show();
+                    }
+                });
+
+                base.msearch.on("select-result", function (eventResult) {
+
+                    // search from Esri default "Use Current Location" event
+                    if (eventResult.source.name === "Address Lookup") {
+                        base.address = {
+                            "singleLine": eventResult.result.feature.attributes.Match_addr,
+                            locationType: "street"
+                        };
+                        base.locatorTask.addressToLocations({
+                            address: base.address,
+                            countryCode: "US"
+                        })
+                        .then(function (evt) {
+                            eventResult = evt;
+                        })
+                        .catch(function(error) {
+                            console.log("Locator error " + error);
+                        }); // end locator
+                    }
+
+
+                    //when selecting current location, feature.attributes don't have the x and y for some reason,
+                    //so grab them from the feature.geometry.
+                    if (!eventResult.result.feature.attributes.X) {
+                        eventResult.result.feature.attributes.X = eventResult.result.feature.geometry.x;
+                        eventResult.result.feature.attributes.Y = eventResult.result.feature.geometry.y;
+
+                    }
+
+
+                    // preserve single quote in search term
+                    var searchTerm = eventResult.target.searchTerm.replace(/'/g, "\\'"),
+                        attributes = JSON.stringify(eventResult.result.feature.attributes),
+                        url = "/members/map?searchTerm=" + encodeURIComponent(searchTerm) + "&selectedResult=" + encodeURIComponent(attributes);
+                    window.location = url;
+                });
+
+                base.msearch.on("search-clear", function (eventResult) {
+                        $('#warningMsg').hide();
+                });
+
+                base.hideMapView = function() {
+                    document.getElementById("district-map-view").style.display = 'none';
+                };
+
+                base.showMapView = function() {
+                    document.getElementById("district-map-view").style.display = '';
+                };
+
+                // this is called once when map finished loading
+                // the onfocusout below is there to fix the
+                // "Uncaught TypeError: Cannot read property 'parentNode' of null" error
+                // TODO: but doesn't seem to work
+                // to replicate this error: click inside text box, click anywhere outside text box
+                base.myview.when(function(){
+                    document.querySelector('.esri-search__input').onfocusout = null;
+                }, function(err){
+                    console.log("map view exception:");
+                    console.log(err);
+                });
+
+
+                base.hideMapView();
+
+            }); // end require
+        }; // end base.init
+
+        base.init();
+    };
+
+    //$('body').on('focusout', () => {});
+
+    $.congress.mapSearchWidget.defaultOptions = {
+
+    };
+
+    $.fn.congress_mapSearchWidget = function (options) {
+        return this.each(function () {
+            var ft = new $.congress.mapSearchWidget(this, options);
+            $(this).data('congress.mapSearchWidget', ft);
+        });
+    };
+
+    $.fn.getcongress_mapSearchWidget = function () {
+        this.data('congress.mapSearchWidget');
+    };
+
+
+}(jQuery));
