@@ -1,6 +1,6 @@
 function VoteGuysView() {
     return (
-        <p>testing.....</p>
+        
     )
 }
 
