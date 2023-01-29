@@ -1,8 +1,8 @@
-// function VoteGuysView() {
-//     return (
+function VoteGuysView() {
+    return (
+        <p>testing.....</p>
+    )
+}
 
-//     )
-// }
-
-// export default VoteGuysView
+ export default VoteGuysView
 

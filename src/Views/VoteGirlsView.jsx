@@ -1,8 +1,8 @@
-// function VoteGirlsView() {
-//     return (
+function VoteGirlsView() {
+    return (
+        <p>testing....</p>
+    )
+}
 
-//     )
-// }
-
-// export default VoteGirlsView
+export default VoteGirlsView
 
