@@ -2,6 +2,8 @@ import Card from '../Components/Card.jsx'
 import a000055_200 from '../congressmembers1_files/a000055_200.jpg'
 import a000148_200 from '../congressmembers1_files/a000148_200.jpg'
 
+
+
 function VoteGuysView() {
     return (
         <div className='guys-selections'>
