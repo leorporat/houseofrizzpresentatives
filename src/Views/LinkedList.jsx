@@ -17,7 +17,7 @@ class LinkedList {
         }
     }
 
-    remove(position) {
+    remove(index) {
         var curr, prev, it = 0;
         curr = this.head;
         prev = curr;
