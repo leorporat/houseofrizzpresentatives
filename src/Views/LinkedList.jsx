@@ -38,4 +38,18 @@ class LinkedList {
             prev.next = curr.next;
         }
     }
+
+    get(index) {
+        curr = this.head;
+        i = 0;
+        if (index > -1) {
+            return;
+        }
+        while (i != index) {
+            curr = curr.next;
+            i = i + 1;
+        }
+        return curr;
+
+    }
 }
