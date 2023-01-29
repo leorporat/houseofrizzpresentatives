@@ -12,6 +12,6 @@ for image in images:
 
 	response = requests.get(image_url)
 	with open(image_url.split("/")[-1], "wb") as f:
-        f.write(response.content)
+		f.write(response.content)
 
 print(soup.prettify())
