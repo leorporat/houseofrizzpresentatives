@@ -1,6 +1,5 @@
 fileNames = open('congresspeoplenames.txt', 'r')
 fileURLs = open('congresspeopleimages.txt', 'r')
-#print(fileNames.readlines())
 namelines = fileNames.readlines()
 imagelines = fileURLs.readlines()
 
