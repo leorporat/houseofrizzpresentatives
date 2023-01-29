@@ -11,7 +11,7 @@ function VoteGuysView() {
             <Card
             image={a000148_200}
             name='Other Fuckface' />
-        </div>
+        </div>b
     )
 }
 
